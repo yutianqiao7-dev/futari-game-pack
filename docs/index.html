@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b1030">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>ふたりであそぼう! ゲームパック</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/games.css">
+</head>
+<body>
+<div class="sky"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><div class="stars"></div></div>
+
+<div id="app">
+  <!-- パソコン用の案内 -->
+  <section id="s-guide" class="screen">
+    <div class="logo"><span class="logo-sub">スマホ2台でつながる</span><h1>ふたりであそぼう!</h1><span class="logo-pack">ゲームパック</span></div>
+    <div class="glass guide-box">
+      <p class="guide-lead">スマホ2台で、このQRコードを読みこんでね</p>
+      <div id="guide-qr" class="qr"></div>
+      <div id="guide-url" class="url"></div>
+      <ol class="guide-steps">
+        <li>スマホ2台を <b>このパソコンと同じWi-Fi</b> につなぐ</li>
+        <li>それぞれのスマホでQRコードを読む(またはURLを入力)</li>
+        <li>2台がつながると、ゲームえらび画面になるよ</li>
+      </ol>
+      <div id="guide-status" class="guide-status">せつぞく待ち… 0 / 2</div>
+    </div>
+    <a class="ghost-link" href="?play=1">このパソコンでもあそぶ(テスト用)</a>
+  </section>
+
+  <!-- 相手待ち -->
+  <section id="s-wait" class="screen">
+    <div class="logo"><span class="logo-sub">スマホ2台でつながる</span><h1>ふたりであそぼう!</h1><span class="logo-pack">ゲームパック</span></div>
+    <div class="glass wait-box">
+      <div class="radar"><i></i><i></i><i></i><b></b></div>
+      <p id="wait-msg" class="wait-msg">じゅんびしています…</p>
+      <div id="wait-room" class="room" hidden><span>あいことば</span><b id="wait-code">----</b></div>
+      <div id="wait-qr" class="qr small"></div>
+      <div id="wait-url" class="url"></div>
+      <p id="wait-hint" class="wait-hint"></p>
+      <form id="join-form" class="join" hidden>
+        <input id="join-code" type="text" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="相手のあいことば">
+        <button class="btn small primary" type="submit">さんか</button>
+      </form>
+      <a id="wait-new" class="ghost-link" href="./" hidden>じぶんで新しい部屋をつくる</a>
+    </div>
+  </section>
+
+  <!-- ゲームえらび -->
+  <section id="s-menu" class="screen">
+    <header class="menu-head">
+      <div class="logo mini"><h1>ふたりであそぼう!</h1></div>
+      <div class="menu-meta"><span id="me-badge" class="badge"></span><button id="mute-btn" class="icon-btn" aria-label="おと"></button></div>
+    </header>
+    <p class="menu-lead">あそぶゲームを えらんでね</p>
+    <div id="menu-list" class="menu-list"></div>
+  </section>
+
+  <!-- ゲーム中 -->
+  <section id="s-game" class="screen">
+    <header class="game-bar">
+      <button id="back-btn" class="bar-btn">‹ メニュー</button>
+      <span id="game-title" class="game-title"></span>
+      <button id="mute-btn2" class="icon-btn" aria-label="おと"></button>
+    </header>
+    <div id="game-root" class="game-root"></div>
+  </section>
+</div>
+
+<div id="modal" class="modal"></div>
+<div id="toast" class="toast"></div>
+<canvas id="fx"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" onerror="void 0"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" onerror="void 0"></script>
+<script src="js/core.js"></script>
+<script src="js/hockey.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/sea.js"></script>
+<script src="js/escape.js"></script>
+<script src="js/pilot.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
