@@ -74,7 +74,7 @@ function stopGame() {
   if (cur) { cur.env.alive = false; cur.env._timers.forEach(clearTimeout); try { if (cur.stop) cur.stop(); } catch (e) { console.error(e); } cur = null; }
   FX.clear(); UI.closeModal();
 }
-function toMenu() { stopGame(); inPlay = true; UI.show('s-menu'); Snd.bgm('menu'); $('#me-badge').textContent = (Net.slot + 1) + 'P'; $('#me-badge').className = 'badge p' + Net.slot; }
+function toMenu() { stopGame(); inPlay = true; UI.show('s-menu'); Snd.bgm('menu'); $('#me-badge').textContent = Net.solo ? 'ひとり' : (Net.slot + 1) + 'P'; $('#me-badge').className = Net.solo ? 'badge solo' : 'badge p' + Net.slot; $('#duo-btn').hidden = !Net.solo; }
 function begin(id, flip) { const m = { t: 'start', game: id, seed: (Math.random() * 2147483647) | 0, flip: !!flip }; Net.send(m); startGame(m); }
 function requestGame(id) {
   if (Net.peers < 2) return;
@@ -87,7 +87,7 @@ function startGame(m) {
   const root = $('#game-root'); root.innerHTML = ''; root.className = 'game-root g-' + m.game;
   Snd.play('start'); Snd.bgm(meta.tune);
   const env = {
-    root, host: Net.slot === 0, slot: Net.slot, seed: m.seed, flip: m.flip, alive: true, _timers: [],
+    root, host: Net.slot === 0, slot: Net.slot, solo: !!Net.solo, seed: m.seed, flip: m.flip, alive: true, _timers: [],
     send: o => Net.send(o),
     later(fn, ms) { const id = setTimeout(() => { if (env.alive) fn(); }, ms); env._timers.push(id); return id; },
     rematch() { requestGame(curId); },
@@ -202,6 +202,24 @@ function bootP2P() {
   Net.onSys = () => { if (Net.peers >= 2) gotPeer(); else { lostPeer(); paintWait(); } };
   wireMessages(); Net.connect('p2p'); paintWait();
 }
+
+// --- ひとりモード: 通信を切って、相手役をCOMにまかせる ---
+function startSolo() {
+  if (Net.solo) return;
+  Net.solo = true; Net.onSys = null;
+  try { if (Net.ws) { Net.ws.onclose = null; Net.ws.close(); } } catch (e) {}
+  try { if (Net.peer) Net.peer.destroy(); } catch (e) {}
+  Net.slot = 0; Net.peers = 2; Net.conn = null;
+  let bot = null;
+  Net.send = o => {
+    if (o.t === 'start') { if (bot) bot.stop(); bot = Com.create(o, m => { if (Net.onMsg) Net.onMsg(m); }); }
+    else if (o.t === 'quit') { if (bot) { bot.stop(); bot = null; } }
+    else if (o.t !== 'k' && bot) bot.msg(o);
+  };
+  wireMessages(); Snd.play('join'); toMenu(); UI.toast('ひとりモード: あいてはCOM');
+}
+$('#solo-btn').addEventListener('click', startSolo);
+$('#duo-btn').addEventListener('click', () => { location.reload(); });
 
 // /info に答えるサーバーがあれば方式1、なければ方式2
 (params.has('p2p') || params.has('room') ? Promise.resolve(null) : fetch('/info').then(r => r.ok ? r.json() : null).catch(() => null))

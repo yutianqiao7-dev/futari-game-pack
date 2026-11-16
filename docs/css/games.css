@@ -183,5 +183,14 @@
 .es-table th .glyph{width:30px;height:30px;color:#8a3b00;vertical-align:middle}
 .es-table .chip{margin:0;padding:0 6px}
 
+.es{position:relative}
+.es-help{margin-left:auto;flex:none;padding:6px 12px;border-radius:99px;background:linear-gradient(180deg,#f4e4c1,#d9b877);color:#3d2400;font-weight:900;font-size:13px;box-shadow:0 3px 0 #6b4a1a;animation:blink 1s infinite alternate}
+.es-help:active{transform:translateY(2px);box-shadow:0 1px 0 #6b4a1a}
+.es-comread{position:absolute;inset:96px 10px 10px;z-index:6;display:none;flex-direction:column;animation:pop .3s cubic-bezier(.2,1.4,.4,1) both}
+.es-comread.on{display:flex}
+.es-comhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:16px 16px 0 0;background:#3a2616;border:2px solid #c9a56a;border-bottom:0;font-weight:900;font-size:13px;color:#ffe8a3}
+.es-close{flex:none;padding:6px 14px;border-radius:99px;background:#c9a56a;color:#2a1a0e;font-weight:900;font-size:13px}
+.es-comread .es-book{margin-top:0}
+
 /* ================= キャンバス系 ================= */
 .g-hockey,.g-pilot{background:#04050f;padding:6px}

@@ -35,14 +35,15 @@ Games.escape = {
     const emblem = ri(3), crystals = [0, 1, 2, 3].map(() => ri(5)), table = [0, 1, 2].map(() => [0, 1, 2, 3, 4].map(() => ri(10)));
     const code = crystals.map(c => table[emblem][c]).join('');
 
-    const operator = (env.slot === 0) !== env.flip;
+    const operator = env.solo || (env.slot === 0) !== env.flip;   // ひとりモードでは自分がとびら係、COMが古文書係
     let stage = 0, miss = 0, left = TIME, over = false, tick = null, lastSec = TIME, endAt = Date.now() + TIME * 1000, pressed = [], entry = '';
 
     const top = `<div class="es-top"><div class="es-timer">4:00</div><div class="es-seals"><i></i><i></i><i></i></div><div class="es-miss"><i></i><i></i><i></i></div></div>`;
     const R = env.root;
     if (operator) {
       R.innerHTML = `<div class="es op">${top}
-        <div class="es-role"><b>とびら係</b>見えるものを 声で相手に伝えよう</div>
+        <div class="es-role"><b>とびら係</b>${env.solo ? 'COMが古文書を読んでくれるよ<button class="es-help">古文書をきく</button>' : '見えるものを 声で相手に伝えよう'}</div>
+        <div class="es-comread"><div class="es-comhead"><span>COM「古文書には こう書いてあるよ」</span><button class="es-close">とじる</button></div><div class="es-book"></div></div>
         <div class="es-door"><div class="es-arch"><span class="es-emblem">${glyph(emblem)}</span></div><div class="es-panel"></div></div></div>`;
     } else {
       R.innerHTML = `<div class="es rd">${top}
@@ -132,6 +133,11 @@ Games.escape = {
        <p class="es-sub">とびらの上の紋章は 太陽・月・星 のどれか。水晶は4つ。</p>`
     ];
     function showCh(i) { book.innerHTML = CH[i]; book.scrollTop = 0; R.querySelectorAll('.es-tabs button').forEach(b => { b.classList.toggle('on', +b.dataset.c === i); b.classList.toggle('now', +b.dataset.c === stage); b.classList.toggle('clear', +b.dataset.c < stage); }); }
+    if (operator && env.solo) {
+      const read = $('.es-comread', R);
+      $('.es-help', R).addEventListener('click', () => { if (over) return; Snd.play('card'); book.innerHTML = CH[Math.min(stage, 2)]; book.scrollTop = 0; read.classList.add('on'); });
+      $('.es-close', R).addEventListener('click', () => { Snd.play('back'); read.classList.remove('on'); });
+    }
     if (!operator) {
       $('.es-tabs', R).addEventListener('click', e => { const c = e.target.dataset && e.target.dataset.c; if (c != null) { Snd.play('tap'); showCh(+c); } });
       showCh(0);

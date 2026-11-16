@@ -57,6 +57,11 @@ button{font-family:inherit;color:inherit;border:0;background:none;padding:0;curs
 .radar b{position:absolute;inset:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--cyan) 55%,#0b4f77);box-shadow:0 0 24px var(--cyan)}
 @keyframes ping{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.15);opacity:0}}
 .wait-msg{margin:0;font-size:17px;font-weight:800}
+#s-wait{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:22px}
+#s-wait .logo{margin:2.5vh 0 1.5vh;flex:none}#s-wait .logo h1{font-size:clamp(30px,8.5vw,50px)}
+#s-wait .wait-box{flex:none;padding:14px 18px;gap:9px}
+#s-wait .radar{width:60px;height:60px;margin:0}#s-wait .radar b{inset:20px}
+#s-wait .solo-btn{flex:none;margin-top:12px}
 .room{display:flex;flex-direction:column;align-items:center;gap:2px}
 .room[hidden],.join[hidden],.ghost-link[hidden]{display:none}
 .room span{font-size:12px;font-weight:900;letter-spacing:.3em;color:var(--cyan)}
@@ -66,6 +71,13 @@ button{font-family:inherit;color:inherit;border:0;background:none;padding:0;curs
 .join input::placeholder{font:700 12px var(--font);letter-spacing:0;color:var(--dim)}
 .join input:focus{border-color:var(--gold)}
 .wait-hint{margin:0;font-size:13px;color:var(--dim)}
+.solo-btn{margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 30px;background:linear-gradient(180deg,#b79cff,#7c4dff 55%,#5a2fd6);border-color:#e4d9ff;box-shadow:0 5px 0 #3a1c94,0 10px 22px rgba(124,77,255,.4),inset 0 1px 0 rgba(255,255,255,.5)}
+.solo-btn:active{box-shadow:0 1px 0 #3a1c94}
+.solo-btn b{font-size:18px}.solo-btn small{font-size:11.5px;font-weight:800;opacity:.9}
+.solo-btn *{pointer-events:none}
+.duo-btn{margin:-4px 0 8px;padding:6px 14px;border-radius:99px;background:var(--glass);border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--dim)}
+.duo-btn[hidden]{display:none}
+.badge.solo{background:#b79cff;color:#1f0d5c}
 
 /* メニュー */
 .menu-head{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 4px}
