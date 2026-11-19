@@ -209,3 +209,14 @@
 .es-door .es-arch{height:min(120px,15vh)}
 .es-door .es-panel{background:linear-gradient(180deg,rgba(20,12,6,.9),rgba(34,22,12,.92));margin:0 4% 3%;width:92%}
 .gcard-ic img{width:78px;height:78px;object-fit:contain;-webkit-user-drag:none}
+.card-art.chara{width:100%;margin:0;flex:1;min-height:0;object-fit:cover;object-position:50% 12%;filter:none}
+.card-f:has(.card-art.chara) .card-pw,.card-f:has(.card-art.chara) .card-el{box-shadow:0 2px 6px rgba(0,0,0,.55)}
+.cb{position:relative}
+.cutin{position:absolute;left:0;right:0;top:14%;height:58%;z-index:8;pointer-events:none;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:cutinBand 1.4s ease both}
+.cutin::before{content:"";position:absolute;inset:18% 0;background:linear-gradient(90deg,transparent,var(--band) 20%,var(--band) 80%,transparent);transform:skewY(-6deg);opacity:.85}
+.cutin.el-fire{--band:rgba(200,40,10,.75)}.cutin.el-water{--band:rgba(20,90,200,.75)}.cutin.el-grass{--band:rgba(30,140,50,.75)}
+.cutin img{position:relative;height:100%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));animation:cutinIn 1.4s cubic-bezier(.2,.9,.3,1) both}
+.cutin.opp img{animation-name:cutinInR}
+@keyframes cutinBand{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
+@keyframes cutinIn{0%{transform:translateX(-90%) scale(.9)}25%,75%{transform:translateX(0) scale(1)}100%{transform:translateX(70%) scale(1.05)}}
+@keyframes cutinInR{0%{transform:translateX(90%) scale(.9)}25%,75%{transform:translateX(0) scale(1)}100%{transform:translateX(-70%) scale(1.05)}}

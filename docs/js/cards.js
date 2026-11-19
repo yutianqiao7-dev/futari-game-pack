@@ -31,7 +31,7 @@ Games.cards = {
        <ellipse cx="35" cy="69" rx="4" ry="2.4" fill="#ffb3c1" opacity=".8"/><ellipse cx="65" cy="69" rx="4" ry="2.4" fill="#ffb3c1" opacity=".8"/>`
     ];
     function art(e, p) {     // Blender で作ったキャラ(パワーで3段階に成長)
-      return `<img class="card-art" src="${Img.url('card_' + EL[e] + (p <= 3 ? 0 : p <= 5 ? 1 : 2))}" alt="" draggable="false">`;
+      return `<img class="card-art chara" src="${Img.url('chara_' + EL[e])}" alt="" draggable="false">`;   // 属性ごとのキャラ絵
     }
     function artOld(e, p) {
       const s = 0.62 + (p - 2) * 0.075, crown = p >= 6 ? `<path d="M34 12l5 9l11-13l11 13l5-9l-3 20H37z" fill="#ffd166" stroke="#8a5a00" stroke-width="2" stroke-linejoin="round" transform="translate(0,-12)"/>` : '';
@@ -77,6 +77,13 @@ Games.cards = {
     const hand = deck.splice(0, 4);
     let hp = [MAXHP, MAXHP], sel = -1, myPick = null, oppLocked = false, oppCard = null, sent = false, busy = false, round = 1, oppHandN = 4, oppDeckN = deck.length, over = false;
 
+    // 勝った側のキャラが大きく横切る演出(全身の絵)
+    EL.forEach(e => { const i = new Image(); i.src = Img.url('chara_' + e + '_full'); });
+    function cutin(e, mine) {
+      const c = el('div', 'cutin ' + (mine ? 'mine' : 'opp') + ' el-' + EL[e], `<img src="${Img.url('chara_' + EL[e] + '_full')}" alt="">`);
+      R.querySelector('.cb').appendChild(c);
+      env.later(() => c.remove(), 1500);
+    }
     function setMsg(t, cls) { msgEl.textContent = t; msgEl.className = 'cb-msg ' + (cls || ''); }
     function paintHP() {
       [['.cb-side.me', hp[0]], ['.cb-side.opp', hp[1]]].forEach(([s, v]) => {
@@ -127,6 +134,7 @@ Games.cards = {
       }, 1250);
       env.later(() => {
         const diff = pa - pb; Snd.play('clash'); FX.shake(arena);
+        if (diff !== 0) cutin(diff > 0 ? a.e : b.e, diff > 0);
         const mid = FX.at($('.cb-mid', R)); FX.burst(mid.x, mid.y, { count: 36, speed: 420, colors: ['#fff', '#ffd166', '#ff7b00', '#7ee8fa'] });
         md.classList.add(diff > 0 ? 'atk-up' : diff < 0 ? 'hurt' : 'bump-up'); od.classList.add(diff < 0 ? 'atk-down' : diff > 0 ? 'hurt' : 'bump-down');
         if (diff === 0) { setMsg(`${pa} 対 ${pb} … ひきわけ!`); return; }

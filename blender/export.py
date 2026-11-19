@@ -9,7 +9,7 @@ DST = os.path.join(ROOT, 'docs', 'img')
 os.makedirs(DST, exist_ok=True)
 
 # 表示サイズに対して大きすぎる原本は縮める(長辺の上限)
-LIMIT = {'hockey_table': 1080, 'escape_door': 900, 'sea_water_mine': 640, 'sea_water_enemy': 640}
+LIMIT = {'chara_fire_full': 960, 'chara_water_full': 960, 'chara_grass_full': 960, 'hockey_table': 1080, 'escape_door': 900, 'sea_water_mine': 640, 'sea_water_enemy': 640}
 
 
 def save(im, name, q=86):
@@ -54,6 +54,19 @@ def icon(name, layers, bg=None):
     return save(c, 'icon_' + name, 90)
 
 
+def card_face(el):
+    """キャラの顔を角丸のカード形に切りぬく(メニューのアイコン用)"""
+    from PIL import ImageDraw
+    im = load('chara_' + el).crop((40, 0, 280, 300)).resize((96, 120), Image.LANCZOS)
+    bg = Image.new('RGBA', im.size, {'fire': (120, 30, 10, 255), 'water': (20, 60, 140, 255), 'grass': (30, 100, 40, 255)}[el])
+    bg.alpha_composite(im)
+    m = Image.new('L', im.size, 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, 95, 119), 12, fill=255)
+    out = Image.new('RGBA', (100, 124), (0, 0, 0, 0))
+    border = Image.new('RGBA', (100, 124), (0, 0, 0, 0)); ImageDraw.Draw(border).rounded_rectangle((0, 0, 99, 123), 14, fill=(255, 255, 255, 255))
+    out.alpha_composite(border); bg.putalpha(m); out.alpha_composite(bg, (2, 2))
+    return out
+
+
 def table_crop():
     t = load('hockey_table').resize((360, 640), Image.LANCZOS)
     t = t.crop((40, 360, 320, 640)).resize((150, 150), Image.LANCZOS)
@@ -65,7 +78,7 @@ def table_crop():
 
 
 total += icon('hockey', [(table_crop(), 150, (80, 80), 0), ('hockey_mallet_pink', 62, (104, 52), 0), ('hockey_puck', 34, (70, 84), 0), ('hockey_mallet_blue', 72, (60, 116), 0)])
-total += icon('cards', [('card_water2', 92, (44, 96), 0), ('card_grass2', 92, (116, 96), 0), ('card_fire2', 108, (80, 62), 0)])
+total += icon('cards', [(card_face('water'), 96, (46, 70), 0), (card_face('grass'), 96, (114, 70), 0), (card_face('fire'), 104, (80, 98), 0)])
 total += icon('sea', [('sea_ship4_h', 158, (80, 84), 28)])
 total += icon('escape', [('escape_door', 150, (80, 80), 0)])
 total += icon('pilot', [('space_planet', 120, (110, 40), 0), ('space_ship', 132, (76, 92), -18)])
