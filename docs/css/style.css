@@ -145,3 +145,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;padding:0;curs
 
 .shake{animation:shake .45s}
 @keyframes shake{10%{transform:translate(-7px,3px)}25%{transform:translate(6px,-4px)}40%{transform:translate(-5px,-2px)}55%{transform:translate(5px,3px)}70%{transform:translate(-3px,2px)}85%{transform:translate(2px,-1px)}}
+.peek-btn{margin-top:2px}
+.res-sub small{font-size:12px;opacity:.85}
+.peek-back{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:45;animation:pop .35s cubic-bezier(.2,1.5,.4,1) both}
+.peek-back:active{transform:translateX(-50%) translateY(4px)}

@@ -223,3 +223,6 @@
 /* 海面はもらった画像: マス目の位置を画像と合わせるため、動かさずぴったり敷く */
 .bs-board.mine .bs-water,.bs-board.enemy .bs-water{animation:none;transform:none;background-size:100% 100%;background-position:0 0}
 .bs-cell{border-color:rgba(190,225,255,.28)}
+/* 試合後: 残っていた敵艦を光らせて見せる */
+.bs-ship.ghost{opacity:1;filter:drop-shadow(0 0 3px #fff3b0) drop-shadow(0 0 9px rgba(255,200,60,.95));animation:fadeIn .8s ease both,ghostPulse 1.4s ease-in-out .8s infinite alternate}
+@keyframes ghostPulse{to{filter:drop-shadow(0 0 2px #fff3b0) drop-shadow(0 0 4px rgba(255,200,60,.5))}}

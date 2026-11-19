@@ -63,7 +63,7 @@ const UI = {
   show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); },
   toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(UI._tt); UI._tt = setTimeout(() => t.classList.remove('on'), 2400); },
   modal(html) { const m = $('#modal'); m.innerHTML = '<div class="modal-card glass">' + html + '</div>'; m.classList.add('on'); return m.firstChild; },
-  closeModal() { const m = $('#modal'); m.classList.remove('on'); m.innerHTML = ''; }
+  closeModal() { const m = $('#modal'); m.classList.remove('on'); m.innerHTML = ''; document.querySelectorAll('.peek-back').forEach(b => b.remove()); }
 };
 
 let cur = null, curId = null, curFlip = false, inPlay = false;
@@ -99,11 +99,18 @@ function startGame(m) {
       if (good) { FX.confetti(); Snd.vibrate([60, 40, 120]); }
       const c = UI.modal(`<div class="res res-${o.kind}"><div class="res-title">${o.title}</div>${o.sub ? `<div class="res-sub">${o.sub}</div>` : ''}${o.extra || ''}
         <div class="res-btns"><button class="btn primary" data-a="again">もう一度</button><button class="btn" data-a="menu">メニューへ</button></div>
+        ${o.peek ? '<button class="btn small peek-btn" data-a="peek">盤面を見る</button>' : ''}
         <div class="res-wait"></div></div>`);
       c.addEventListener('click', e => {
         const a = e.target.dataset && e.target.dataset.a; if (!a) return;
         Snd.play('tap');
         if (a === 'again') { env.rematch(); if (!env.host) $('.res-wait', c).textContent = 'リクエストを送りました…'; }
+        else if (a === 'peek') {        // 結果をいったん隠して盤面を見る
+          $('#modal').classList.remove('on');
+          const b = el('button', 'btn primary peek-back', '結果にもどる');
+          b.addEventListener('click', () => { Snd.play('tap'); b.remove(); $('#modal').classList.add('on'); });
+          document.body.appendChild(b);
+        }
         else env.quit();
       });
     }

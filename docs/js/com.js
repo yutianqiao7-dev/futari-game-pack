@@ -98,7 +98,10 @@ const Com = {
         else if (m.t === 'bx') {
           if (m.h) live.push(m.i);
           if (m.s) { const c = cellsOf(m.s); live = live.filter(i => !c.includes(i)); }
-          if (m.o) over = true;
+          if (m.o) {                       // COM の勝ち: 残っていた艦の位置を見せる
+            over = true;
+            reply({ t: 'bf', ships: ships.filter(s => s.hits < s.len).map(s => ({ len: s.len, x: s.x, y: s.y, v: s.v })) });
+          }
         }
       };
     },

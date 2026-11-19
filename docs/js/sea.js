@@ -124,7 +124,8 @@ Games.sea = {
     });
     function finish(win) {
       phase = 'over'; setStatus(win ? 'てきの艦隊を ぜんめつさせた!' : '艦隊が ぜんめつ…', win ? 'good' : 'bad');
-      env.later(() => env.result({ kind: win ? 'win' : 'lose', title: win ? 'かち!' : 'まけ…', sub: win ? 'みごとな ねらいうち!' : 'つぎは しずめてやろう' }), 1700);
+      env.later(() => setView('enemy'), win ? 900 : 1300);
+      env.later(() => env.result({ kind: win ? 'win' : 'lose', title: win ? 'かち!' : 'まけ…', sub: (win ? 'みごとな ねらいうち!' : 'つぎは しずめてやろう') + '<br><small>「盤面を見る」で、艦がどこにあったか確認できるよ</small>', peek: true }), 3200);
     }
 
     randomize(); paintShips(); placeUI();
@@ -159,6 +160,7 @@ Games.sea = {
         }
         else if (m.t === 'bf') {                      // 負けたあと、相手の残りの艦を見せてもらう
           (m.ships || []).forEach(s => { const d = el('div', 'bs-ship ghost', shipSVG(s.len, s.v)); posShip(d, s); $('.bs-ships', bEnemy).appendChild(d); });
+          if ((m.ships || []).length) env.later(() => { Snd.play('sonar'); setStatus('光っているのが、のこっていた艦', 'hot'); }, 1500);   // 「ぜんめつ」の表示のあとに出す
           env.later(() => setView('enemy'), 600);
         }
       }
