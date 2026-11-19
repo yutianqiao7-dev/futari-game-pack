@@ -220,3 +220,6 @@
 @keyframes cutinBand{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
 @keyframes cutinIn{0%{transform:translateX(-90%) scale(.9)}25%,75%{transform:translateX(0) scale(1)}100%{transform:translateX(70%) scale(1.05)}}
 @keyframes cutinInR{0%{transform:translateX(90%) scale(.9)}25%,75%{transform:translateX(0) scale(1)}100%{transform:translateX(-70%) scale(1.05)}}
+/* 海面はもらった画像: マス目の位置を画像と合わせるため、動かさずぴったり敷く */
+.bs-board.mine .bs-water,.bs-board.enemy .bs-water{animation:none;transform:none;background-size:100% 100%;background-position:0 0}
+.bs-cell{border-color:rgba(190,225,255,.28)}
