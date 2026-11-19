@@ -109,7 +109,7 @@ Games.pilot = {
       [[70, 150, 190, 'rgba(120,60,220,.33)'], [300, 380, 220, 'rgba(20,150,200,.22)'], [120, 560, 200, 'rgba(220,50,120,.2)']].forEach(([x, y, r, col]) => { gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
       // 遠くの惑星(Blender で作った画像があればそれを使う)
       const pl = Img.get('space_planet');
-      if (pl) { g.drawImage(pl, 300 - 92, 104 - 63, 184, 126.5); return; }
+      if (pl) { const ph = 184 * pl.naturalHeight / pl.naturalWidth; g.drawImage(pl, 300 - 92, 104 - ph / 2, 184, ph); return; }
       gr = g.createRadialGradient(288, 92, 4, 300, 104, 46); gr.addColorStop(0, '#ffd9a0'); gr.addColorStop(0.6, '#c2553a'); gr.addColorStop(1, '#3a1030'); g.fillStyle = gr; g.beginPath(); g.arc(300, 104, 40, 0, 7); g.fill();
       g.strokeStyle = 'rgba(255,220,170,.55)'; g.lineWidth = 3; g.beginPath(); g.ellipse(300, 104, 64, 13, -0.35, 0, 7); g.stroke();
     }
@@ -137,8 +137,9 @@ Games.pilot = {
       let g = c.createRadialGradient(0, 14, 0, 0, 14, 22); g.addColorStop(0, 'rgba(255,90,140,.7)'); g.addColorStop(1, 'rgba(255,90,140,0)'); c.fillStyle = g; c.fillRect(-24, -4, 48, 40);
       const im = Img.get('space_drone');
       if (im) {
-        c.drawImage(im, -26, -24, 52, 43.3);
-        if (fl) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(im, -26, -24, 52, 43.3); }
+        const dh = 52 * im.naturalHeight / im.naturalWidth;      // 画像の縦横比のまま
+        c.drawImage(im, -26, -dh / 2 - 2, 52, dh);
+        if (fl) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(im, -26, -dh / 2 - 2, 52, dh); }
         c.restore(); return;
       }
       g = c.createLinearGradient(0, -10, 0, 12); g.addColorStop(0, fl ? '#fff' : '#e9ecf5'); g.addColorStop(0.5, fl ? '#fff' : '#8791b3'); g.addColorStop(1, '#343a5c');
@@ -159,12 +160,12 @@ Games.pilot = {
       if (invOn) { c.globalAlpha = 0.45 + 0.4 * Math.sin(t0 * 30); }
       const sp = Img.get('space_ship'), tu = Img.get('space_turret');
       if (sp && tu) {     // Blender で作った機体(画像の幅 0.64 単位 = 60px)
-        for (const ex of [-4.2, 4.2]) {
-          const f = 12 + Math.random() * 9, g = c.createLinearGradient(0, 17, 0, 17 + f); g.addColorStop(0, '#fff'); g.addColorStop(0.35, '#ffd166'); g.addColorStop(1, 'rgba(255,60,0,0)');
-          c.fillStyle = g; c.beginPath(); c.moveTo(ex - 3.4, 17); c.quadraticCurveTo(ex, 17 + f * 1.5, ex + 3.4, 17); c.fill();
+        for (const ex of [-5.9, 5.6]) {     // Gemini の機体のエンジン位置に合わせた、ゆらめく噴射
+          const f = 9 + Math.random() * 8, g = c.createLinearGradient(0, 22, 0, 22 + f); g.addColorStop(0, '#fff'); g.addColorStop(0.35, '#7ee8fa'); g.addColorStop(1, 'rgba(40,120,255,0)');
+          c.fillStyle = g; c.beginPath(); c.moveTo(ex - 3, 22); c.quadraticCurveTo(ex, 22 + f * 1.5, ex + 3, 22); c.fill();
         }
         c.drawImage(sp, -30, -30, 60, 60);
-        c.save(); c.translate(0, 5); c.rotate(a); c.drawImage(tu, -20.6, -20.6, 41.2, 41.2); c.restore();
+        c.save(); c.translate(0, 5); c.rotate(a); c.drawImage(tu, -15, -15, 30, 30); c.restore();
         if (invOn) { c.globalAlpha = 0.5 + 0.3 * Math.sin(t0 * 12); c.strokeStyle = '#7ee8fa'; c.lineWidth = 2.5; c.beginPath(); c.arc(0, 0, 31, 0, 7); c.stroke(); }
         c.restore(); return;
       }

@@ -226,3 +226,5 @@
 /* 試合後: 残っていた敵艦を光らせて見せる */
 .bs-ship.ghost{opacity:1;filter:drop-shadow(0 0 3px #fff3b0) drop-shadow(0 0 9px rgba(255,200,60,.95));animation:fadeIn .8s ease both,ghostPulse 1.4s ease-in-out .8s infinite alternate}
 @keyframes ghostPulse{to{filter:drop-shadow(0 0 2px #fff3b0) drop-shadow(0 0 4px rgba(255,200,60,.5))}}
+/* 扉は Gemini の絵(アーチも絵に含まれる)なので、枠は四角にして絵をそのまま見せる */
+.es-door{border-radius:14px;background:url(../img/escape_door.webp) center top/cover no-repeat,#120c08}
