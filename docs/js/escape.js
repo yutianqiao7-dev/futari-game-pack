@@ -70,7 +70,7 @@ Games.escape = {
         panel.innerHTML = `<h3>第二の封印</h3><p>4つの紋章を <b>正しい順</b> におせ</p><div class="es-glyphs">${shown.map(g => `<button class="gbtn" data-g="${g}">${glyph(g)}<em></em></button>`).join('')}</div>`;
       } else if (stage === 2) {
         entry = '';
-        panel.innerHTML = `<h3>第三の封印</h3><p>とびらの上の紋章と 水晶の色を伝えよ</p><div class="es-crystals">${crystals.map(c => `<i style="--c:${COL[c].c}"></i>`).join('')}</div>
+        panel.innerHTML = `<h3>第三の封印</h3><p>とびらの上の紋章と 水晶の色を伝えよ</p><div class="es-crystals">${crystals.map(c => `<img src="${Img.url('escape_crystal_' + ['red', 'blue', 'yellow', 'green', 'white'][c])}" style="--c:${COL[c].c}" alt="${COL[c].n}">`).join('')}</div>
           <div class="es-code"><b></b><b></b><b></b><b></b></div><div class="es-keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-k="${n}">${n}</button>`).join('')}<button data-k="c" class="sub">けす</button><button data-k="0">0</button><span></span></div>`;
       }
       $('.es-emblem', R).classList.toggle('lit', stage === 2);

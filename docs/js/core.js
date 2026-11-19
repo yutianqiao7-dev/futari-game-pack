@@ -8,6 +8,20 @@ function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79
 function shuffle(arr, r) { r = r || Math.random; for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; }
 const Games = {};
 
+// ===== Blender で作った画像素材(docs/img/*.webp)。読みこみ前は従来の描画にもどる =====
+const Img = (() => {
+  const cache = {};
+  function get(name) {
+    let im = cache[name];
+    if (!im) { im = cache[name] = new Image(); im.decoding = 'async'; im.src = 'img/' + name + '.webp'; }
+    return im.complete && im.naturalWidth ? im : null;
+  }
+  // 先に読みこんでおく(ゲームを開いた瞬間に絵が出るように)
+  ['hockey_table', 'hockey_mallet_blue', 'hockey_mallet_pink', 'hockey_puck', 'space_ship', 'space_turret', 'space_drone', 'space_heart', 'space_planet',
+    'space_rock0', 'space_rock1', 'space_rock2', 'space_rock3', 'sea_water_mine', 'sea_water_enemy', 'escape_door'].forEach(get);
+  return { get, url: name => 'img/' + name + '.webp' };
+})();
+
 // キャンバスを論理サイズ W×H で画面いっぱいに合わせる
 function fitCanvas(cv, W, H) {
   const v = { s: 1 };

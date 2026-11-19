@@ -105,8 +105,10 @@ Games.hockey = {
     // --- 描画 ---
     function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
     function buildBg() {
-      bg = document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height; bgKey = cv.width + 'x' + cv.height;
+      bg = document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height; bgKey = cv.width + 'x' + cv.height + (Img.get('hockey_table') ? 'i' : '');
       const g = bg.getContext('2d'); g.setTransform(view.s, 0, 0, view.s, 0, 0);
+      const tbl = Img.get('hockey_table');
+      if (tbl) { rr(g, 0, 0, W, H, 14); g.save(); g.clip(); g.drawImage(tbl, 0, 0, W, H); g.restore(); return; }   // Blender で作った台
       let gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#2a0f3f'); gr.addColorStop(0.5, '#0c1a48'); gr.addColorStop(1, '#06304f');
       rr(g, 0, 0, W, H, 14); g.fillStyle = gr; g.fill();
       gr = g.createRadialGradient(W / 2, H / 2, 20, W / 2, H / 2, 380); gr.addColorStop(0, 'rgba(120,170,255,.28)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
@@ -132,6 +134,10 @@ Games.hockey = {
     }
     function mallet(m, col) {
       c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(m.x + 3, m.y + 7, MR, MR * 0.92, 0, 0, 7); c.fill();
+      const sp = Img.get(col === MINE ? 'hockey_mallet_blue' : 'hockey_mallet_pink');
+      if (sp) {     // 画像は直径の1.3倍の範囲を写している
+        c.shadowColor = col[1]; c.shadowBlur = 16; const s = MR * 2.6; c.drawImage(sp, m.x - s / 2, m.y - s / 2, s, s); c.shadowBlur = 0; return;
+      }
       let g = c.createRadialGradient(m.x - 9, m.y - 11, 3, m.x, m.y, MR); g.addColorStop(0, col[0]); g.addColorStop(0.45, col[1]); g.addColorStop(1, col[2]);
       c.shadowColor = col[1]; c.shadowBlur = 18; c.fillStyle = g; c.beginPath(); c.arc(m.x, m.y, MR, 0, 7); c.fill(); c.shadowBlur = 0;
       c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 2; c.beginPath(); c.arc(m.x, m.y, MR - 2, 0, 7); c.stroke();
@@ -141,7 +147,7 @@ Games.hockey = {
       c.fillStyle = 'rgba(255,255,255,.75)'; c.beginPath(); c.ellipse(m.x - 5, m.y - 8, 5, 2.6, -0.6, 0, 7); c.fill();
     }
     function draw(dt) {
-      if (!bg || bgKey !== cv.width + 'x' + cv.height) buildBg();
+      if (!bg || bgKey !== cv.width + 'x' + cv.height + (Img.get('hockey_table') ? 'i' : '')) buildBg();
       c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height);
       const sx = shake > 0.3 ? rand(-shake, shake) : 0, sy = shake > 0.3 ? rand(-shake, shake) : 0;
       c.setTransform(view.s, 0, 0, view.s, sx * view.s, sy * view.s);
@@ -160,9 +166,13 @@ Games.hockey = {
       // パック
       if (phase !== 'goal' || bannerT < 0.7) {
         c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.arc(puck.x + 2, puck.y + 5, PR, 0, 7); c.fill();
+        const pk = Img.get('hockey_puck');
+        if (pk) { c.shadowColor = '#ffb703'; c.shadowBlur = 20; const s = PR * 2.6; c.drawImage(pk, puck.x - s / 2, puck.y - s / 2, s, s); c.shadowBlur = 0; }
+        else {
         const g = c.createRadialGradient(puck.x - 5, puck.y - 6, 1, puck.x, puck.y, PR); g.addColorStop(0, '#fff'); g.addColorStop(0.5, '#ffd166'); g.addColorStop(1, '#e36414');
         c.shadowColor = '#ffb703'; c.shadowBlur = 22; c.fillStyle = g; c.beginPath(); c.arc(puck.x, puck.y, PR, 0, 7); c.fill(); c.shadowBlur = 0;
         c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 1.6; c.beginPath(); c.arc(puck.x, puck.y, PR * 0.6, 0, 7); c.stroke();
+        }
       }
       mallet(op, THEIRS); mallet(me, MINE);
       // 火花

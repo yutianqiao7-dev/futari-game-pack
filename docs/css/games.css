@@ -194,3 +194,18 @@
 
 /* ================= キャンバス系 ================= */
 .g-hockey,.g-pilot{background:#04050f;padding:6px}
+
+/* ================= Blender で作った画像素材 ================= */
+.bs-board.mine .bs-water{inset:0;background:url(../img/sea_water_mine.webp) center/cover,linear-gradient(160deg,#2aa7d6,#0a3d74);animation:seaPan 14s ease-in-out infinite alternate}
+.bs-board.enemy .bs-water{inset:0;background:url(../img/sea_water_enemy.webp) center/cover,linear-gradient(200deg,#3a5fb8,#141f52);animation:seaPan 14s ease-in-out infinite alternate}
+@keyframes seaPan{from{background-position:48% 48%}to{background-position:52% 54%}}
+.bs-water{transform:scale(1.08)}
+.bs-cell{border-color:rgba(255,255,255,.2)}
+.bs-ship{padding:0}
+.bs-ship img{width:100%;height:100%;display:block;object-fit:fill;-webkit-user-drag:none;pointer-events:none}
+.card-art{display:block;width:96%;margin-top:12%;flex:1;min-height:0;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35));-webkit-user-drag:none;pointer-events:none}
+.es-crystals img{width:34px;height:42px;object-fit:contain;filter:drop-shadow(0 0 8px var(--c))}
+.es-door{background:url(../img/escape_door.webp) center top/cover no-repeat,linear-gradient(180deg,#7b5a38,#3a2616);border:0;box-shadow:0 16px 40px rgba(0,0,0,.6);border-radius:46% 46% 10px 10px/22% 22% 10px 10px}
+.es-door .es-arch{height:min(120px,15vh)}
+.es-door .es-panel{background:linear-gradient(180deg,rgba(20,12,6,.9),rgba(34,22,12,.92));margin:0 4% 3%;width:92%}
+.gcard-ic img{width:78px;height:78px;object-fit:contain;-webkit-user-drag:none}

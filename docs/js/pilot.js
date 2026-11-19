@@ -103,11 +103,13 @@ Games.pilot = {
 
     // --- 描画 ---
     function buildBg() {
-      bg = document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height; bgKey = cv.width + 'x' + cv.height;
+      bg = document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height; bgKey = cv.width + 'x' + cv.height + (Img.get('space_planet') ? 'i' : '');
       const g = bg.getContext('2d'); g.setTransform(view.s, 0, 0, view.s, 0, 0);
       let gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#050316'); gr.addColorStop(0.55, '#0d0b3a'); gr.addColorStop(1, '#1b0f4a'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
       [[70, 150, 190, 'rgba(120,60,220,.33)'], [300, 380, 220, 'rgba(20,150,200,.22)'], [120, 560, 200, 'rgba(220,50,120,.2)']].forEach(([x, y, r, col]) => { gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
-      // 遠くの惑星
+      // 遠くの惑星(Blender で作った画像があればそれを使う)
+      const pl = Img.get('space_planet');
+      if (pl) { g.drawImage(pl, 300 - 92, 104 - 63, 184, 126.5); return; }
       gr = g.createRadialGradient(288, 92, 4, 300, 104, 46); gr.addColorStop(0, '#ffd9a0'); gr.addColorStop(0.6, '#c2553a'); gr.addColorStop(1, '#3a1030'); g.fillStyle = gr; g.beginPath(); g.arc(300, 104, 40, 0, 7); g.fill();
       g.strokeStyle = 'rgba(255,220,170,.55)'; g.lineWidth = 3; g.beginPath(); g.ellipse(300, 104, 64, 13, -0.35, 0, 7); g.stroke();
     }
@@ -117,6 +119,12 @@ Games.pilot = {
     }
     function rock(id, x, y, r, fl) {
       const s = shapeOf(id), n = s.pts.length, rot = t0 * s.spin;
+      const im = Img.get('space_rock' + (id % 4));
+      if (im) {     // 画像は半径の2.5倍の幅
+        const d = r * 2.5; c.save(); c.translate(x, y); c.rotate(rot + id); c.drawImage(im, -d / 2, -d / 2, d, d);
+        if (fl) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(im, -d / 2, -d / 2, d, d); }
+        c.restore(); return;
+      }
       c.save(); c.translate(x, y); c.rotate(rot);
       c.beginPath(); for (let i = 0; i <= n; i++) { const a = i / n * 6.283, k = s.pts[i % n] * r, px = Math.cos(a) * k, py = Math.sin(a) * k; if (i === 0) c.moveTo(px, py); else { const a0 = (i - 0.5) / n * 6.283, k0 = (s.pts[i % n] + s.pts[(i - 1) % n]) / 2 * r * 1.04; c.quadraticCurveTo(Math.cos(a0) * k0, Math.sin(a0) * k0, px, py); } } c.closePath();
       c.rotate(-rot); const g = c.createRadialGradient(-r * 0.4, -r * 0.45, r * 0.1, 0, 0, r * 1.15); g.addColorStop(0, fl ? '#fff' : '#c9b8a8'); g.addColorStop(0.55, fl ? '#ffe' : '#7d6b62'); g.addColorStop(1, '#2e2530');
@@ -127,6 +135,12 @@ Games.pilot = {
     function drone(x, y, fl) {
       c.save(); c.translate(x, y + Math.sin(t0 * 5 + x) * 2);
       let g = c.createRadialGradient(0, 14, 0, 0, 14, 22); g.addColorStop(0, 'rgba(255,90,140,.7)'); g.addColorStop(1, 'rgba(255,90,140,0)'); c.fillStyle = g; c.fillRect(-24, -4, 48, 40);
+      const im = Img.get('space_drone');
+      if (im) {
+        c.drawImage(im, -26, -24, 52, 43.3);
+        if (fl) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.7; c.drawImage(im, -26, -24, 52, 43.3); }
+        c.restore(); return;
+      }
       g = c.createLinearGradient(0, -10, 0, 12); g.addColorStop(0, fl ? '#fff' : '#e9ecf5'); g.addColorStop(0.5, fl ? '#fff' : '#8791b3'); g.addColorStop(1, '#343a5c');
       c.fillStyle = g; c.strokeStyle = '#161a33'; c.lineWidth = 2; c.beginPath(); c.ellipse(0, 3, 21, 9, 0, 0, 7); c.fill(); c.stroke();
       g = c.createRadialGradient(-4, -9, 1, 0, -4, 12); g.addColorStop(0, '#fff'); g.addColorStop(0.4, '#ff8fb1'); g.addColorStop(1, '#a01a58'); c.fillStyle = g; c.beginPath(); c.arc(0, -1, 10.5, Math.PI, 0); c.closePath(); c.fill(); c.stroke();
@@ -135,12 +149,25 @@ Games.pilot = {
     }
     function heart(x, y) {
       c.save(); c.translate(x, y); const s = 1 + Math.sin(t0 * 8) * 0.1; c.scale(s, s); c.shadowColor = '#ff5d8f'; c.shadowBlur = 16;
+      const im = Img.get('space_heart');
+      if (im) { c.drawImage(im, -18, -18, 36, 36); c.restore(); return; }
       const g = c.createRadialGradient(-3, -4, 1, 0, 0, 13); g.addColorStop(0, '#fff'); g.addColorStop(0.4, '#ff8fb1'); g.addColorStop(1, '#e01e5a'); c.fillStyle = g;
       c.beginPath(); c.moveTo(0, 10); c.bezierCurveTo(-16, -2, -8, -13, 0, -5); c.bezierCurveTo(8, -13, 16, -2, 0, 10); c.fill(); c.restore();
     }
     function drawShip(x, y, a, invOn) {
       c.save(); c.translate(x, y);
       if (invOn) { c.globalAlpha = 0.45 + 0.4 * Math.sin(t0 * 30); }
+      const sp = Img.get('space_ship'), tu = Img.get('space_turret');
+      if (sp && tu) {     // Blender で作った機体(画像の幅 0.64 単位 = 60px)
+        for (const ex of [-4.2, 4.2]) {
+          const f = 12 + Math.random() * 9, g = c.createLinearGradient(0, 17, 0, 17 + f); g.addColorStop(0, '#fff'); g.addColorStop(0.35, '#ffd166'); g.addColorStop(1, 'rgba(255,60,0,0)');
+          c.fillStyle = g; c.beginPath(); c.moveTo(ex - 3.4, 17); c.quadraticCurveTo(ex, 17 + f * 1.5, ex + 3.4, 17); c.fill();
+        }
+        c.drawImage(sp, -30, -30, 60, 60);
+        c.save(); c.translate(0, 5); c.rotate(a); c.drawImage(tu, -20.6, -20.6, 41.2, 41.2); c.restore();
+        if (invOn) { c.globalAlpha = 0.5 + 0.3 * Math.sin(t0 * 12); c.strokeStyle = '#7ee8fa'; c.lineWidth = 2.5; c.beginPath(); c.arc(0, 0, 31, 0, 7); c.stroke(); }
+        c.restore(); return;
+      }
       // 炎
       const fl = 16 + Math.random() * 10; let g = c.createLinearGradient(0, 14, 0, 14 + fl); g.addColorStop(0, '#fff'); g.addColorStop(0.35, '#ffd166'); g.addColorStop(1, 'rgba(255,60,0,0)');
       c.fillStyle = g; c.beginPath(); c.moveTo(-6, 14); c.quadraticCurveTo(0, 14 + fl * 1.5, 6, 14); c.fill();
@@ -164,7 +191,7 @@ Games.pilot = {
       c.restore();
     }
     function draw(dt) {
-      if (!bg || bgKey !== cv.width + 'x' + cv.height) buildBg();
+      if (!bg || bgKey !== cv.width + 'x' + cv.height + (Img.get('space_planet') ? 'i' : '')) buildBg();
       c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height);
       const sx = shake > 0.3 ? rand(-shake, shake) : 0, sy = shake > 0.3 ? rand(-shake, shake) : 0;
       c.setTransform(view.s, 0, 0, view.s, sx * view.s, sy * view.s);

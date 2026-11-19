@@ -4,6 +4,9 @@ Games.sea = {
   start(env) {
     const N = 8, LENS = [4, 3, 3, 2, 2], PCT = 100 / N;
     function shipSVG(len, v) {
+      return `<img src="${Img.url('sea_ship' + len + (v ? '_v' : '_h'))}" alt="" draggable="false">`;   // Blender で作った軍艦
+    }
+    function shipSVGOld(len, v) {
       const L = len * 100;
       let parts = `<path d="M6 50Q8 20 42 18H${L - 52}Q${L - 16} 24 ${L - 5} 50Q${L - 16} 76 ${L - 52} 82H42Q8 80 6 50Z" fill="url(#bsHull)" stroke="#1c2738" stroke-width="4" stroke-linejoin="round"/>
         <path d="M18 50Q20 30 46 29H${L - 56}Q${L - 30} 33 ${L - 20} 50Q${L - 30} 67 ${L - 56} 71H46Q20 70 18 50Z" fill="url(#bsDeck)"/>`;

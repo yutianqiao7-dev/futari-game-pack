@@ -30,7 +30,10 @@ Games.cards = {
        <path d="M45 71q5 5 10 0" fill="none" stroke="#12351d" stroke-width="2.4" stroke-linecap="round"/>
        <ellipse cx="35" cy="69" rx="4" ry="2.4" fill="#ffb3c1" opacity=".8"/><ellipse cx="65" cy="69" rx="4" ry="2.4" fill="#ffb3c1" opacity=".8"/>`
     ];
-    function art(e, p) {
+    function art(e, p) {     // Blender で作ったキャラ(パワーで3段階に成長)
+      return `<img class="card-art" src="${Img.url('card_' + EL[e] + (p <= 3 ? 0 : p <= 5 ? 1 : 2))}" alt="" draggable="false">`;
+    }
+    function artOld(e, p) {
       const s = 0.62 + (p - 2) * 0.075, crown = p >= 6 ? `<path d="M34 12l5 9l11-13l11 13l5-9l-3 20H37z" fill="#ffd166" stroke="#8a5a00" stroke-width="2" stroke-linejoin="round" transform="translate(0,-12)"/>` : '';
       const stars = p >= 4 ? `<g fill="#fff" opacity=".9"><path d="M12 30l2 6l6 2l-6 2l-2 6l-2-6l-6-2l6-2z"/><path d="M88 60l1.5 4.5l4.5 1.5l-4.5 1.5L88 72l-1.5-4.5L82 66l4.5-1.5z"/>${p >= 7 ? '<path d="M84 16l2 6l6 2l-6 2l-2 6l-2-6l-6-2l6-2z"/><path d="M14 74l1.5 4.5L20 80l-4.5 1.5L14 86l-1.5-4.5L8 80l4.5-1.5z"/>' : ''}</g>` : '';
       return `<svg class="card-art" viewBox="0 0 100 100">${stars}<g transform="translate(50 54) scale(${s}) translate(-50 -50)">${BODY[e]}${crown}</g></svg>`;

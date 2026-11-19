@@ -115,7 +115,7 @@ function startGame(m) {
 (function buildMenu() {
   const list = $('#menu-list');
   META.forEach((g, i) => {
-    const b = el('button', 'gcard', `<span class="gcard-ic">${ICONS[g.id]}</span><span class="gcard-tx"><span class="gcard-tag ${g.tag === '協力' ? 'coop' : 'vs'}">${g.tag}</span><b>${g.title}</b><small>${g.desc}</small></span><span class="gcard-go">▶</span>`);
+    const b = el('button', 'gcard', `<span class="gcard-ic"><img src="${Img.url('icon_' + g.id)}" alt="" draggable="false" onerror="this.outerHTML=ICONS['${g.id}']"></span><span class="gcard-tx"><span class="gcard-tag ${g.tag === '協力' ? 'coop' : 'vs'}">${g.tag}</span><b>${g.title}</b><small>${g.desc}</small></span><span class="gcard-go">▶</span>`);
     b.style.setProperty('--c1', g.c1); b.style.setProperty('--c2', g.c2); b.style.animationDelay = (i * 70) + 'ms';
     b.addEventListener('click', () => { Snd.play('tap'); requestGame(g.id); });
     list.appendChild(b);
