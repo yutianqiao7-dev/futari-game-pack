@@ -65,7 +65,7 @@ def table_crop():
 
 
 total += icon('hockey', [(table_crop(), 150, (80, 80), 0), ('hockey_mallet_pink', 62, (104, 52), 0), ('hockey_puck', 34, (70, 84), 0), ('hockey_mallet_blue', 72, (60, 116), 0)])
-total += icon('cards', [('card_water2', 112, (42, 84), 12), ('card_grass2', 112, (118, 84), -12), ('card_fire2', 140, (80, 76), 0)])
+total += icon('cards', [('card_water2', 92, (44, 96), 0), ('card_grass2', 92, (116, 96), 0), ('card_fire2', 108, (80, 62), 0)])
 total += icon('sea', [('sea_ship4_h', 158, (80, 84), 28)])
 total += icon('escape', [('escape_door', 150, (80, 80), 0)])
 total += icon('pilot', [('space_planet', 120, (110, 40), 0), ('space_ship', 132, (76, 92), -18)])
