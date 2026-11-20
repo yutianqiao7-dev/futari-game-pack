@@ -9,7 +9,7 @@ DST = os.path.join(ROOT, 'docs', 'img')
 os.makedirs(DST, exist_ok=True)
 
 # 表示サイズに対して大きすぎる原本は縮める(長辺の上限)
-LIMIT = {'chara_fire_full': 960, 'chara_water_full': 960, 'chara_grass_full': 960, 'hockey_table': 1080, 'escape_door': 900, 'sea_water_mine': 640, 'sea_water_enemy': 640}
+LIMIT = {'chara_fire_full': 960, 'chara_water_full': 960, 'chara_grass_full': 960, 'hockey_table': 1080, 'escape_door': 900, 'sea_water_mine': 640, 'sea_water_enemy': 640, 'pg_table': 1080, 'pt_floor': 900}
 
 
 def save(im, name, q=86):
@@ -82,4 +82,9 @@ total += icon('cards', [(card_face('water'), 96, (46, 70), 0), (card_face('grass
 total += icon('sea', [('sea_ship4_h', 158, (80, 84), 28)])
 total += icon('escape', [('escape_door', 150, (80, 80), 0)])
 total += icon('pilot', [('space_planet', 120, (110, 40), 0), ('space_ship', 132, (76, 92), -18)])
+total += icon('janken', [('jk_scissors', 78, (44, 58), -14), ('jk_paper', 82, (112, 56), 14), ('jk_rock', 86, (80, 112), 0)])
+total += icon('mines', [('mn_explosion', 100, (104, 56), 0), ('mn_flag', 70, (40, 52), 0), ('mn_bomb', 96, (72, 104), 0)])
+total += icon('auction', [('au_coins', 92, (110, 112), 0), ('au_crown', 104, (68, 66), -8), ('au_gavel', 90, (108, 52), 20)])
+total += icon('pong', [('pg_paddle_blue', 110, (54, 76), -24), ('pg_paddle_red', 118, (104, 84), 22), ('pg_ball', 30, (80, 30), 0)])
+total += icon('paint', [('pt_pink', 84, (108, 58), 0), ('pt_bomb', 60, (36, 50), 0), ('pt_blue', 96, (66, 108), 0)])
 print('webp total %.0f KB in %s' % (total / 1024, DST))

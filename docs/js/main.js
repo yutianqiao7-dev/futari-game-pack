@@ -50,12 +50,18 @@ const ICONS = {
     <rect x="50" y="72" width="20" height="10" rx="3" fill="#5c677d"/></g>
     <path d="M92 20l10-10M96 30l14-6" stroke="#80ffdb" stroke-width="3.5" stroke-linecap="round"/></svg>`
 };
+['janken', 'mines', 'auction', 'pong', 'paint'].forEach((k, i) => { ICONS[k] = `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" fill="#fff" opacity=".25"/><text x="60" y="76" text-anchor="middle" font-size="44" font-weight="900" fill="#fff">${'じ地オピ陣'[i]}</text></svg>`; });
 const META = [
   { id: 'hockey', title: 'エアホッケー', tag: '対戦', desc: 'はじいて、きめろ! 7点先取のスピード勝負', tune: 'hockey', c1: '#0ea5e9', c2: '#312e81' },
   { id: 'cards', title: 'エレメントデュエル', tag: '対戦', desc: '炎・水・草の読みあいカードバトル', tune: 'cards', c1: '#f97316', c2: '#7c2d12' },
   { id: 'sea', title: 'かいせんバトル', tag: '対戦', desc: 'かくれた艦隊を ねらいうち!', tune: 'sea', c1: '#06b6d4', c2: '#1e3a8a' },
   { id: 'escape', title: '封印のとびら', tag: '協力', desc: '声をかけあって 3つの封印をとけ!', tune: 'escape', c1: '#d4a24c', c2: '#4a2c12' },
-  { id: 'pilot', title: 'ふたりで宇宙船', tag: '協力', desc: 'そうじゅう と しゃげき を分担して生きのこれ', tune: 'pilot_', c1: '#8b5cf6', c2: '#1e1b4b' }
+  { id: 'pilot', title: 'ふたりで宇宙船', tag: '協力', desc: 'そうじゅう と しゃげき を分担して生きのこれ', tune: 'pilot_', c1: '#8b5cf6', c2: '#1e1b4b' },
+  { id: 'janken', title: '心理戦じゃんけん', tag: '対戦', desc: '勝った手で点がちがう! 読みあいの15点勝負', tune: 'janken', c1: '#f43f5e', c2: '#7f1d1d' },
+  { id: 'mines', title: '地雷原しかけ合い', tag: '対戦', desc: '地雷をかくして、相手の盤を掘りあう', tune: 'mines', c1: '#65a30d', c2: '#1a2e05' },
+  { id: 'auction', title: 'ひみつのオークション', tag: '対戦', desc: '相手の残金は見えない。お宝を競り落とせ', tune: 'auction', c1: '#d97706', c2: '#451a03' },
+  { id: 'pong', title: 'かたむけピンポン', tag: '対戦', desc: 'スマホをかたむけて打ち返す! 7点先取', tune: 'pong', c1: '#2563eb', c2: '#0c1f4f' },
+  { id: 'paint', title: '陣取りペイント', tag: '対戦', desc: '60秒でぬりまくれ! 体当たりもあり', tune: 'paint', c1: '#ec4899', c2: '#1e3a8a' }
 ];
 META[4].tune = 'space';
 

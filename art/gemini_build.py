@@ -71,3 +71,25 @@ def levers():
 for nm, pc in zip(['red', 'blue', 'yellow', 'green'], split(matte(P('escape_orbs')), 4)):
     finish(pc, 'escape_orb_' + nm, 200, 0.04, True)
 levers()
+
+
+# ---- 2026-11-20 追加の5本(じゃんけん・地雷原・オークション・ピンポン・陣取りペイント) ----
+def crop_bg(src, box, name, size):
+    im = Image.open(P(src)).convert('RGB').crop(box).resize(size, Image.LANCZOS)
+    im.save(os.path.join(OUT, name + '.png')); print(name, im.size)
+
+
+for nm, pc in zip(['jk_rock', 'jk_scissors', 'jk_paper'], split(matte(P('janken_hands')), 3)):
+    finish(pc, nm, 256, 0.04, True)
+for nm, pc in zip(['mn_bomb', 'mn_flag', 'mn_explosion'], split(matte(P('mines_items')), 3)):
+    finish(pc, nm, 160, 0.04, True)
+for nm, pc in zip(['au_crown', 'au_gem', 'au_cup', 'au_necklace', 'au_chest', 'au_cat'], split(matte(P('auction_treasures')), 6)):
+    finish(pc, nm, 256, 0.04, True)
+for nm, pc in zip(['au_skull', 'au_doll', 'au_coins', 'au_gavel'], split(matte(P('auction_misc')), 4)):
+    finish(pc, nm, 256, 0.04, True)
+crop_bg('pong_table', (64, 138, 704, 1238), 'pg_table', (720, 1280))      # 青い台の面だけ(白い外枠をふくむ)
+for nm, pc in zip(['pg_paddle_red', 'pg_paddle_blue', 'pg_ball'], split(matte(P('pong_items')), 3)):
+    finish(pc, nm, 200 if nm != 'pg_ball' else 64, 0.02, nm == 'pg_ball')
+crop_bg('paint_floor', (14, 40, 754, 1340), 'pt_floor', (720, 1280))      # 低い壁の内側まで
+for nm, pc in zip(['pt_blue', 'pt_pink', 'pt_bomb'], split(matte(P('paint_chars')), 3)):
+    finish(pc, nm, 160, 0.04, True)

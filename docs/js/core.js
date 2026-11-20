@@ -18,7 +18,7 @@ const Img = (() => {
   }
   // 先に読みこんでおく(ゲームを開いた瞬間に絵が出るように)
   ['hockey_table', 'hockey_mallet_blue', 'hockey_mallet_pink', 'hockey_puck', 'space_ship', 'space_turret', 'space_drone', 'space_heart', 'space_planet',
-    'space_rock0', 'space_rock1', 'space_rock2', 'space_rock3', 'sea_water_mine', 'sea_water_enemy', 'escape_door', 'escape_orb_red', 'escape_orb_blue', 'escape_orb_yellow', 'escape_orb_green', 'escape_lever_up', 'escape_lever_dn', 'escape_lamp_off', 'escape_lamp_on'].forEach(get);
+    'space_rock0', 'space_rock1', 'space_rock2', 'space_rock3', 'sea_water_mine', 'sea_water_enemy', 'escape_door', 'escape_orb_red', 'escape_orb_blue', 'escape_orb_yellow', 'escape_orb_green', 'escape_lever_up', 'escape_lever_dn', 'escape_lamp_off', 'escape_lamp_on', 'pg_table', 'pg_paddle_red', 'pg_paddle_blue', 'pg_ball', 'pt_floor', 'pt_blue', 'pt_pink', 'pt_bomb'].forEach(get);
   return { get, url: name => 'img/' + name + '.webp' };
 })();
 
@@ -184,7 +184,22 @@ const Snd = (() => {
       lead: [24, _, _, _, 19, _, _, _, 25, _, _, _, 24, _, _, _, 22, _, _, _, 19, _, _, _, 27, _, 25, _, 24, _, 22, _] },
     space: { bpm: 150, root: 220, wave: 'square', lv: 0.065, hat: 1, kick: 1,
       bass: [0, _, 0, 12, 0, _, 0, 12, -4, _, -4, 8, -4, _, -4, 8, 3, _, 3, 15, 3, _, 3, 15, -2, _, -2, 10, -2, _, 2, 5],
-      lead: [12, _, 19, _, 24, _, 19, _, 20, _, 24, _, 27, _, 24, _, 15, _, 22, _, 27, _, 22, _, 22, _, 26, _, 29, _, 26, 24] }
+      lead: [12, _, 19, _, 24, _, 19, _, 20, _, 24, _, 27, _, 24, _, 15, _, 22, _, 27, _, 22, _, 22, _, 26, _, 29, _, 26, 24] },
+    janken: { bpm: 124, root: 261.6, wave: 'square', lv: 0.06, hat: 1, kick: 1,
+      bass: [0, _, 0, _, 7, _, 0, _, 5, _, 5, _, 7, _, 5, _, 3, _, 3, _, 10, _, 3, _, 5, _, 7, _, 2, _, 7, _],
+      lead: [12, _, 14, 15, _, 12, _, _, 17, _, 15, 14, _, 12, _, _, 15, _, 17, 19, _, 15, _, _, 14, _, 12, 11, _, 14, _, _] },
+    mines: { bpm: 100, root: 196, wave: 'triangle', lv: 0.14, hat: 1,
+      bass: [0, _, _, 0, _, _, 0, _, -2, _, _, -2, _, _, -2, _, -4, _, _, -4, _, _, -4, _, -5, _, _, -5, _, -3, _, -1],
+      lead: [12, _, 15, _, 12, _, 10, _, 12, _, _, _, 7, _, _, _, 8, _, 12, _, 15, _, 13, _, 12, _, 10, _, 7, _, _, _] },
+    auction: { bpm: 96, root: 233, wave: 'triangle', lv: 0.13, hat: 1,
+      bass: [0, _, 4, _, 7, _, 9, _, 5, _, 9, _, 12, _, 9, _, 2, _, 5, _, 9, _, 5, _, 7, _, 11, _, 14, _, 11, _],
+      lead: [16, _, _, 19, _, 21, _, _, 17, _, _, 21, _, 24, _, _, 14, _, 17, _, 21, _, 17, _, 19, _, 23, _, 26, _, 23, _] },
+    pong: { bpm: 132, root: 220, wave: 'square', lv: 0.06, hat: 1, kick: 1,
+      bass: [0, 0, _, 0, _, 0, 7, _, 5, 5, _, 5, _, 5, 3, _, 0, 0, _, 0, _, 0, 7, _, 10, _, 8, _, 7, _, 5, _],
+      lead: [24, _, 19, _, 24, _, 26, _, 27, _, 26, _, 24, _, 19, _, 22, _, 19, _, 22, _, 24, _, 26, _, 24, _, 22, _, 19, _] },
+    paint: { bpm: 142, root: 246.9, wave: 'square', lv: 0.06, hat: 1, kick: 1,
+      bass: [0, _, 0, 12, _, 0, 7, _, 5, _, 5, 17, _, 5, 7, _, 3, _, 3, 15, _, 3, 10, _, 7, _, 7, 19, _, 7, 11, _],
+      lead: [12, 14, 16, _, 19, _, 16, _, 17, 19, 21, _, 24, _, 21, _, 15, 17, 19, _, 22, _, 19, _, 19, 21, 23, _, 26, _, 23, _] }
   };
   function stopBgm() { if (timer) { clearInterval(timer); timer = null; } curTune = null; }
   function bgm(name) {

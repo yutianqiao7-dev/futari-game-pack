@@ -146,7 +146,147 @@ const Com = {
           curX = bx; reply({ t: 'pi', r: 'p', x: bx, y: y0 });
         }
       };
-    }
+    },
     // 封印のとびら は、COMが古文書を読み上げる形にしているので、やりとりは escape.js の中で完結する
+
+    // --- 心理戦じゃんけん: 前と同じ手は出さない。ダブルはたまに使う ---
+    janken(start, reply, later) {
+      let prev = -1, used = false, picked = null, playerLocked = false, sent = false;
+      const reveal = () => { if (picked && playerLocked && !sent) { sent = true; reply({ t: 'jr', h: picked.h, d: picked.d ? 1 : 0 }); } };
+      const pick = () => {
+        if (picked) return;
+        const ok = [0, 1, 2].filter(h => h !== prev), w = ok.map(h => [1, 1.1, 1.25][h]); let r = Math.random() * w.reduce((a, b) => a + b), h = ok[0];
+        for (let i = 0; i < ok.length; i++) { r -= w[i]; if (r <= 0) { h = ok[i]; break; } }
+        const d = !used && Math.random() < 0.2; if (d) used = true;
+        picked = { h, d }; reply({ t: 'jp' }); reveal();
+      };
+      later(pick, rand(1500, 4000));
+      return m => {
+        if (m.t === 'jp') { playerLocked = true; if (!picked) later(pick, rand(400, 1300)); reveal(); }
+        else if (m.t === 'jr') { prev = picked ? picked.h : -1; picked = null; playerLocked = false; sent = false; later(pick, rand(4600, 8000)); }
+      };
+    },
+
+    // --- 地雷原しかけ合い: 数字から危ないマスをよけて掘り、ほどほどで得点にする ---
+    mines(start, reply, later) {
+      const N = 6, C = N * N, MINES = 7, GOAL = 15;
+      const nb = i => { const x = i % N, y = Math.floor(i / N), a = []; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; const X = x + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < N && Y < N) a.push(Y * N + X); } return a; };
+      const mine = new Array(C).fill(false); shuffle([...Array(C).keys()]).slice(0, MINES).forEach(i => mine[i] = true);
+      const myOpen = new Array(C).fill(-1), view = new Array(C).fill(-1);
+      let ready = [false, false], turn = start.flip ? 0 : 1, bank = 0, tp = 0, goal = rand(3, 6), over = false;   // turn 0 = COM
+      function dig(i) {
+        if (mine[i]) return { b: 1, c: [i, -2] };
+        return { b: 0, c: [i, nb(i).filter(j => mine[j]).length] };
+      }
+      function risk(i) {
+        let r = -1;
+        for (const k of nb(i)) {
+          if (view[k] < 0) continue;
+          const ns = nb(k), known = ns.filter(j => view[j] === -2).length, unk = ns.filter(j => view[j] === -1).length;
+          if (unk) r = Math.max(r, (view[k] - known) / unk);
+        }
+        if (r >= 0) return r;
+        const unkAll = view.filter(v => v === -1).length, left = MINES - view.filter(v => v === -2).length;
+        return unkAll ? left / unkAll : 1;
+      }
+      function choose() {
+        let best = [], bs = 9;
+        for (let i = 0; i < C; i++) { if (view[i] !== -1) continue; const r = risk(i) + Math.random() * 0.04; if (r < bs - 1e-9) { bs = r; best = [i]; } }
+        return { i: best[0], r: bs };
+      }
+      function go() {
+        if (over || turn !== 0 || !ready[0] || !ready[1]) return;
+        const ch = choose(); if (ch.i == null) return;
+        if (tp > 0 && (tp >= goal || ch.r > 0.32)) { bank += tp; tp = 0; turn = 1; goal = rand(3, 6); reply({ t: 'me' }); if (bank >= GOAL) over = true; return; }
+        reply({ t: 'mo', i: ch.i });
+      }
+      later(() => { ready[0] = true; reply({ t: 'mready' }); later(go, 1200); }, rand(1500, 2600));
+      return m => {
+        if (m.t === 'mready') { ready[1] = true; later(go, 1500); }
+        else if (m.t === 'mr') {
+          for (let k = 0; k < m.c.length; k += 2) view[m.c[k]] = m.c[k + 1];
+          if (m.b) { tp = 0; turn = 1; }
+          else { tp += m.c.length / 2; if (bank + tp >= GOAL) { over = true; bank += tp; tp = 0; reply({ t: 'me' }); return; } later(go, rand(900, 1500)); }
+        }
+        else if (m.t === 'mo') {
+          const r = dig(m.i); for (let k = 0; k < r.c.length; k += 2) myOpen[r.c[k]] = r.c[k + 1];
+          reply({ t: 'mr', i: m.i, b: r.b, c: r.c });
+          if (r.b) { turn = 0; later(go, 1800); }
+        }
+        else if (m.t === 'me') { turn = 0; later(go, 1400); }
+        else if (m.t === 'mf') { over = true; reply({ t: 'mf', m: mine.map((v, i) => v ? i : -1).filter(i => i >= 0) }); }
+      };
+    },
+
+    // --- 入札オークション: のこりのお宝に合わせてコインを配分する ---
+    auction(start, reply, later) {
+      const V = [8, 6, 5, 4, 3, 2, -5, -3], lots = shuffle(V.slice(), rng(start.seed));
+      if (lots[0] < 0) lots.push(lots.shift());
+      let idx = 0, coins = 100, bid = null, playerLocked = false, sent = false;
+      const reveal = () => { if (bid != null && playerLocked && !sent) { sent = true; reply({ t: 'av', v: bid }); } };
+      const pick = () => {
+        if (bid != null || idx >= lots.length) return;
+        const v = lots[idx], rest = lots.slice(idx).filter(x => x > 0).reduce((a, b) => a + b, 0) || 1;
+        let b = v > 0 ? coins * v / rest * rand(0.75, 1.45) : Math.abs(v) * rand(1.5, 4.5);
+        bid = clamp(Math.round(b), 0, coins); reply({ t: 'ab' }); reveal();
+      };
+      later(pick, rand(2000, 4500));
+      return m => {
+        if (m.t === 'ab') { playerLocked = true; if (bid == null) later(pick, rand(500, 1500)); reveal(); }
+        else if (m.t === 'av') {
+          if (bid !== m.v && bid > m.v) coins -= bid;
+          idx++; bid = null; playerLocked = false; sent = false;
+          later(pick, rand(4200, 7500));
+        }
+      };
+    },
+
+    // --- ピンポン: 玉がくる位置を読んで動く(少しおくれて、少しずれる) ---
+    pong(start, reply) {
+      const W = 360, H = 640, PY = H - 74, PW = 74;
+      let x = W / 2, last = performance.now(), err = 0, lastVy = 0, hits = 0;
+      return m => {
+        if (m.t !== 'gs') return;
+        const now = performance.now(), dt = Math.min(0.05, (now - last) / 1000); last = now;
+        const [bx, by, vx, vy] = m.b; let tx = W / 2;
+        if (m.ph !== 'play') hits = 0;
+        if (Math.sign(vy) !== Math.sign(lastVy)) { hits++; err = rand(-1, 1) * (24 + Math.min(hits, 14) * 4.5); }   // ラリーが続くほどずれやすい
+        lastVy = vy;
+        if (m.ph === 'play' && vy > 0) {
+          let px = bx + vx * ((PY - by) / vy); const L = W - 16;          // 壁で反射する分も計算
+          px -= 8; px = ((px % (2 * L)) + 2 * L) % (2 * L); if (px > L) px = 2 * L - px; px += 8;
+          tx = px + err;
+        } else if (m.ph === 'serve' && m.sv === 1) tx = W / 2 + Math.sin(now / 400) * 60;
+        x += clamp(tx - x, -440 * dt, 440 * dt); x = clamp(x, PW / 2, W - PW / 2);
+        reply({ t: 'gm', x: W - x });
+      };
+    },
+
+    // --- 陣取りペイント: まだ塗っていない所をねらい、近くにきたら体当たり ---
+    paint(start, reply) {
+      const W = 360, H = 640, CS = 20, GX = 18, NC = GX * 32;
+      const grid = new Int8Array(NC).fill(-1); let tgt = null, tgtT = 0, last = performance.now();
+      return m => {
+        if (m.t !== 'ts') return;
+        const now = performance.now(), dt = (now - last) / 1000; last = now; tgtT -= dt;
+        for (let k = 0; k < m.g.length; k += 2) grid[m.g[k]] = m.g[k + 1];
+        const [x, y, ox, oy] = m.p;
+        if (m.ph !== 'play' || m.f[0] > 0) { reply({ t: 'tm', x: 0, y: 0, d: 0 }); return; }
+        if (m.it && Math.hypot(m.it[0] - x, m.it[1] - y) < 230) tgt = { x: m.it[0], y: m.it[1] };
+        else if (!tgt || tgtT <= 0 || Math.hypot(tgt.x - x, tgt.y - y) < 12) {
+          let best = null, bs = 1e9;
+          for (let n = 0; n < 50; n++) {
+            const i = Math.floor(Math.random() * NC); if (grid[i] === 0) continue;
+            const cx = (i % GX) * CS + CS / 2, cy = Math.floor(i / GX) * CS + CS / 2, s = Math.hypot(cx - x, cy - y) - (grid[i] === 1 ? 40 : 0);
+            if (s < bs) { bs = s; best = { x: cx, y: cy }; }
+          }
+          tgt = best || { x: rand(40, W - 40), y: rand(40, H - 40) }; tgtT = rand(0.8, 1.6);
+        }
+        let vx = tgt.x - x, vy = tgt.y - y; const d = Math.hypot(vx, vy) || 1; vx /= d; vy /= d;
+        let dash = 0; const od = Math.hypot(ox - x, oy - y);
+        if (od < 90 && m.f[4] <= 0 && Math.random() < 0.08) { vx = (ox - x) / od; vy = (oy - y) / od; dash = 1; }
+        reply({ t: 'tm', x: +(-vx).toFixed(2), y: +(-vy).toFixed(2), d: dash });
+      };
+    }
   }
 };
