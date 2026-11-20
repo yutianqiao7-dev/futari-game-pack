@@ -228,3 +228,57 @@
 @keyframes ghostPulse{to{filter:drop-shadow(0 0 2px #fff3b0) drop-shadow(0 0 4px rgba(255,200,60,.5))}}
 /* 扉は Gemini の絵(アーチも絵に含まれる)なので、枠は四角にして絵をそのまま見せる */
 .es-door{border-radius:14px;background:url(../img/escape_door.webp) center top/cover no-repeat,#120c08}
+
+/* ===== 封印のとびら: 新しい謎 ===== */
+.es-panel{overflow-y:auto}
+.es-panel h3{font-size:16px}
+.es-case{margin:0 0 10px;padding:8px 10px 2px;border-radius:12px;background:rgba(90,50,10,.1);border:1.5px solid rgba(90,50,10,.3)}
+.es-case-h{display:flex;align-items:center;gap:6px;font-weight:900;color:#8a3b00;margin-bottom:4px}
+.es-case-h .glyph{width:26px;height:26px}
+.es-book .glyph{width:1.3em;height:1.3em;vertical-align:-.25em;color:#8a3b00}
+.es-embnote{margin-top:10px!important}
+.es-cols.c5{grid-template-columns:repeat(5,1fr);gap:6px}
+.es-cols.c5 span{width:min(38px,100%)}
+/* 光の宝珠 */
+.es-round{margin-left:6px;padding:1px 8px;border-radius:99px;background:#3a2616;color:#ffe8a3!important;font-size:12px}
+.es-orbs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:min(230px,80%);margin:6px auto}
+.orb{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,var(--c) 30%,#000 140%);opacity:.35;border:3px solid rgba(255,232,163,.5);box-shadow:inset 0 -8px 16px rgba(0,0,0,.5);transition:opacity .15s,transform .1s,box-shadow .15s}
+.orb.lit{opacity:1;box-shadow:0 0 26px 8px var(--c),inset 0 -6px 12px rgba(0,0,0,.3);transform:scale(1.06)}
+.orb.press{opacity:.85;transform:scale(.92)}
+/* 見えない迷路 */
+.es-maze{display:grid;grid-template-columns:18px 1fr;grid-template-rows:16px 1fr;gap:3px;width:min(250px,86%);margin:2px auto}
+.es-mz-top{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);text-align:center;font-size:11px;color:#e8d5b0;font-weight:900}
+.es-mz-side{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);align-items:center;font-size:11px;color:#e8d5b0;font-weight:900;text-align:center}
+.es-mz-grid{grid-column:2;grid-row:2;aspect-ratio:1;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:4px;border-radius:10px;background:#120b05;border:2px solid #8a6a3a}
+.es-mz-grid i{border-radius:5px;background:rgba(255,232,163,.08);position:relative}
+.es-mz-grid i.mk::before{content:"";position:absolute;inset:16%;border-radius:50%;border:3px solid #3ddc84;box-shadow:0 0 8px #3ddc84}
+.es-mz-grid i.gl::after{content:"";position:absolute;inset:22%;background:#ff4d6d;clip-path:polygon(50% 0,100% 100%,0 100%);filter:drop-shadow(0 0 6px #ff4d6d)}
+.es-mz-grid i.me{background:radial-gradient(circle,#fff 0 30%,rgba(255,255,255,.4) 45%,transparent 70%);box-shadow:0 0 12px #fff}
+.es-arrows{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,44px);gap:6px;justify-content:center;margin-top:4px}
+.es-arrows button{border-radius:12px;background:linear-gradient(180deg,#8c6a44,#4a321c);border:2px solid #c9a56a;color:#ffe8a3;font-size:18px;box-shadow:0 4px 0 #20140a}
+.es-arrows button:active{transform:translateY(3px);box-shadow:0 1px 0 #20140a}
+.es-arrows [data-d=n]{grid-column:2}.es-arrows [data-d=w]{grid-column:1;grid-row:2}.es-arrows [data-d=s]{grid-column:2;grid-row:2}.es-arrows [data-d=e]{grid-column:3;grid-row:2}
+.es-mazes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.es-mazes div{background:rgba(255,250,235,.6);border:2px solid rgba(90,50,10,.4);border-radius:10px;padding:4px}
+.es-mazes svg{display:block;width:100%}
+/* ことばのダイヤル */
+.es-dials{display:flex;gap:8px;justify-content:center;margin:6px 0}
+.es-dial{display:flex;flex-direction:column;align-items:center;gap:4px}
+.es-dial b{width:54px;height:62px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(180deg,#2a1a0e,#120b05 50%,#2a1a0e);border:2px solid #c9a56a;color:#ffe8a3;font-size:30px;font-weight:900;text-shadow:0 0 10px #ffb703}
+.es-dial button{width:54px;height:34px;border-radius:10px;background:linear-gradient(180deg,#8c6a44,#4a321c);border:2px solid #c9a56a;color:#ffe8a3;font-size:14px}
+.es-dial button:active,.es-say:active,.es-set:active{transform:translateY(2px)}
+.es-say,.es-set{margin-top:6px;padding:10px 26px}
+.es-words{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.es-words span{text-align:center;padding:6px 2px;border-radius:8px;background:rgba(90,50,10,.12);font-weight:900;font-size:14px;color:#3d2400}
+/* レバーと灯 */
+.es-lamps{display:flex;gap:18px;justify-content:center;margin:4px 0 10px}
+.es-lamps i{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a4630,#1a1209);border:2px solid #8a6a3a}
+.es-lamps i.on{background:radial-gradient(circle at 40% 35%,#fff7d6,#ffd166 45%,#f08c00);border-color:#fff3c4;box-shadow:0 0 18px 5px rgba(255,200,80,.85)}
+.es-levers{display:flex;gap:10px;justify-content:center}
+.lever{width:44px;height:110px;border-radius:12px;background:#1a1209;border:2px solid #8a6a3a;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px}
+.lever i{position:absolute;left:50%;width:10px;height:44px;margin-left:-5px;border-radius:6px;background:linear-gradient(90deg,#9aa3ad,#e6ebf0,#7c858f);transition:top .15s}
+.lever i::before{content:"";position:absolute;left:50%;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a8a,#c1121f);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.lever.up i{top:8px}.lever.up i::before{top:-10px}
+.lever.dn i{top:34px}.lever.dn i::before{top:22px}
+.lever span{position:relative;z-index:1;font-size:11px;font-weight:900;color:#e8d5b0}
+.es-lv td{font-size:20px!important}
