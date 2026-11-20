@@ -135,7 +135,7 @@ Games.escape = {
         }
         return {
           name: '光の宝珠', answer: () => ({ seq, LEN, maps }),
-          op: () => { round = 0; input = 0; return `<p>光る順を伝え、表のとおりに おせ <b class="es-round">1 / 3</b></p><div class="es-orbs">${C4.map(c => `<button class="orb" data-c="${c}" style="--c:${COL[c].c}"></button>`).join('')}</div><p class="es-sub">光る順番は くりかえし見られる</p>`; },
+          op: () => { round = 0; input = 0; return `<p>光る順を伝え、表のとおりに おせ <b class="es-round">1 / 3</b></p><div class="es-orbs">${C4.map(c => `<button class="orb" data-c="${c}" style="--c:${COL[c].c};background-image:url(${Img.url('escape_orb_' + ['red', 'blue', 'yellow', 'green'][c])})"></button>`).join('')}</div><p class="es-sub">光る順番は くりかえし見られる</p>`; },
           enter(panel) { panelRef = panel; flash(); },
           leave() { token++; panelRef = null; },
           click(e, panel) {

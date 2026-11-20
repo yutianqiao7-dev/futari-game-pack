@@ -18,7 +18,7 @@ const Img = (() => {
   }
   // 先に読みこんでおく(ゲームを開いた瞬間に絵が出るように)
   ['hockey_table', 'hockey_mallet_blue', 'hockey_mallet_pink', 'hockey_puck', 'space_ship', 'space_turret', 'space_drone', 'space_heart', 'space_planet',
-    'space_rock0', 'space_rock1', 'space_rock2', 'space_rock3', 'sea_water_mine', 'sea_water_enemy', 'escape_door'].forEach(get);
+    'space_rock0', 'space_rock1', 'space_rock2', 'space_rock3', 'sea_water_mine', 'sea_water_enemy', 'escape_door', 'escape_orb_red', 'escape_orb_blue', 'escape_orb_yellow', 'escape_orb_green', 'escape_lever_up', 'escape_lever_dn', 'escape_lamp_off', 'escape_lamp_on'].forEach(get);
   return { get, url: name => 'img/' + name + '.webp' };
 })();
 

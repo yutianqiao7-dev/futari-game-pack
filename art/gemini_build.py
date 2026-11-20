@@ -54,3 +54,20 @@ finish(matte(P('space_planet')), 'space_planet', 420, 0.02)
 door()
 for nm, pc in zip(['red', 'blue', 'yellow', 'green', 'white'], split(matte(P('escape_crystals')), 5)):
     finish(pc, 'escape_crystal_' + nm, 160, 0.05)
+
+
+def levers():
+    """レバー: 上・下で台座の位置がそろうよう、同じ大きさの枠で切る(取っ手が右にはみ出すぶん幅を広めに)"""
+    ps = split(matte(P('escape_levers')), 4)
+    for nm, pc, x0 in [('up', ps[0], 106), ('dn', ps[1], 411)]:
+        c = pc.crop((x0, 140, x0 + 250, 630))
+        c.thumbnail((160, 320), Image.LANCZOS)
+        c.save(os.path.join(OUT, 'escape_lever_' + nm + '.png'))
+    finish(ps[2], 'escape_lamp_off', 128, 0.04, True)
+    finish(ps[3], 'escape_lamp_on', 128, 0.04, True)
+    print('escape_levers')
+
+
+for nm, pc in zip(['red', 'blue', 'yellow', 'green'], split(matte(P('escape_orbs')), 4)):
+    finish(pc, 'escape_orb_' + nm, 200, 0.04, True)
+levers()

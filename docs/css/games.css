@@ -242,9 +242,9 @@
 /* 光の宝珠 */
 .es-round{margin-left:6px;padding:1px 8px;border-radius:99px;background:#3a2616;color:#ffe8a3!important;font-size:12px}
 .es-orbs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:min(230px,80%);margin:6px auto}
-.orb{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,var(--c) 30%,#000 140%);opacity:.35;border:3px solid rgba(255,232,163,.5);box-shadow:inset 0 -8px 16px rgba(0,0,0,.5);transition:opacity .15s,transform .1s,box-shadow .15s}
-.orb.lit{opacity:1;box-shadow:0 0 26px 8px var(--c),inset 0 -6px 12px rgba(0,0,0,.3);transform:scale(1.06)}
-.orb.press{opacity:.85;transform:scale(.92)}
+.orb{aspect-ratio:1;border-radius:50%;background:center/contain no-repeat;border:0;filter:brightness(.42) saturate(.7);transition:filter .15s,transform .1s}
+.orb.lit{filter:brightness(1.2) drop-shadow(0 0 18px var(--c)) drop-shadow(0 0 6px var(--c));transform:scale(1.08)}
+.orb.press{filter:brightness(.9) drop-shadow(0 0 10px var(--c));transform:scale(.92)}
 /* 見えない迷路 */
 .es-maze{display:grid;grid-template-columns:18px 1fr;grid-template-rows:16px 1fr;gap:3px;width:min(250px,86%);margin:2px auto}
 .es-mz-top{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);text-align:center;font-size:11px;color:#e8d5b0;font-weight:900}
@@ -272,13 +272,15 @@
 .es-words span{text-align:center;padding:6px 2px;border-radius:8px;background:rgba(90,50,10,.12);font-weight:900;font-size:14px;color:#3d2400}
 /* レバーと灯 */
 .es-lamps{display:flex;gap:18px;justify-content:center;margin:4px 0 10px}
-.es-lamps i{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a4630,#1a1209);border:2px solid #8a6a3a}
-.es-lamps i.on{background:radial-gradient(circle at 40% 35%,#fff7d6,#ffd166 45%,#f08c00);border-color:#fff3c4;box-shadow:0 0 18px 5px rgba(255,200,80,.85)}
-.es-levers{display:flex;gap:10px;justify-content:center}
-.lever{width:44px;height:110px;border-radius:12px;background:#1a1209;border:2px solid #8a6a3a;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px}
+.es-lamps i{width:44px;height:44px;border-radius:50%;background:url(../img/escape_lamp_off.webp) center/contain no-repeat}
+.es-lamps i.on{background-image:url(../img/escape_lamp_on.webp);filter:drop-shadow(0 0 12px rgba(255,200,80,.9))}
+.es-levers{display:flex;gap:4px;padding-right:18px;justify-content:center}
+.lever{width:48px;height:160px;border:0;background:none;position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:0 0 0 12px}
 .lever i{position:absolute;left:50%;width:10px;height:44px;margin-left:-5px;border-radius:6px;background:linear-gradient(90deg,#9aa3ad,#e6ebf0,#7c858f);transition:top .15s}
 .lever i::before{content:"";position:absolute;left:50%;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a8a,#c1121f);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.lever::before{content:"";position:absolute;left:0;top:0;width:70px;height:137px;background:url(../img/escape_lever_dn.webp) left top/contain no-repeat;pointer-events:none}
+.lever.up::before{background-image:url(../img/escape_lever_up.webp)}.lever i{display:none}
 .lever.up i{top:8px}.lever.up i::before{top:-10px}
 .lever.dn i{top:34px}.lever.dn i::before{top:22px}
-.lever span{position:relative;z-index:1;font-size:11px;font-weight:900;color:#e8d5b0}
+.lever span{position:relative;z-index:1;width:22px;text-align:center;font-size:13px;font-weight:900;color:#e8d5b0}
 .es-lv td{font-size:20px!important}
